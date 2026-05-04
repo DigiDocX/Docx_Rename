@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import {
+  buildFilenameFromEntities,
   compromiseExtractEntities,
   pickTopEntityCandidates,
   scoreExtractedEntities,
@@ -72,6 +73,10 @@ export function PDFTester() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const cropPercentLabel = useMemo(() => Math.round(CROP_PERCENT * 100), []);
+  const suggestedFilename = useMemo(
+    () => buildFilenameFromEntities(topEntities, 60),
+    [topEntities]
+  );
 
   const handlePickPdf = useCallback(async () => {
     setErrorMessage(null);
@@ -230,6 +235,11 @@ export function PDFTester() {
             ))}
           </View>
         )}
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Suggested Filename</Text>
+        <Text style={styles.secondaryText}>{suggestedFilename}</Text>
       </View>
     </ScrollView>
   );
